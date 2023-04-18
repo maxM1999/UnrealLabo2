@@ -6,9 +6,8 @@
 #include "GameFramework/Character.h"
 #include "Avatar.generated.h"
 
-class AHealthPotion;
 class UCharacterAttributes;
-class APickable;
+
 UCLASS()
 class CALLOFSWATGUY_API AAvatar : public ACharacter
 {
@@ -29,26 +28,17 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetPercentHealth() const;
 
-	UFUNCTION(BlueprintPure, meta=(NotBlueprintThreadSafe="true"))
-	int32 GetHealthPotionCount() const;
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnUpdateHealth();
-
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnDeath();
 	
 	UFUNCTION(BlueprintCallable)
 	UTexture2D* GetPortrait() const;
 
-	void PickItem(APickable* Pickable);
-
-	UFUNCTION(BlueprintImplementableEvent, Category="MyEvents")
-	void UpdateItemCount(const FString& NewPotionCount);
+	UFUNCTION(BlueprintCallable)
+	void FootstepsEvent();
 
 	bool IsAlive() const;
 
-	void UseItem();
 
 
 	/*******  PROPERTIES *******/
@@ -58,10 +48,21 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-private:
+	UPROPERTY(EditAnywhere)
+	USoundBase* DirtSound;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* GrassSound;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* SandSound;
+
 	float CurrentHealth;
-	bool bIsAlive;
-	int32 HealthPotionCount;
-	TArray<AHealthPotion*> PossessedHealthPotions;
+
+private:
+	bool PerformLineTrace(FHitResult& OutHit) const;
+	void PlayFootstepsSoundFromHitSurface(UPhysicalMaterial* HitMaterial, const FVector& ImpactPoint);
 	
+	
+	bool bIsAlive;
 };

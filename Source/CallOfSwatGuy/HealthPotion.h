@@ -14,10 +14,17 @@ class CALLOFSWATGUY_API AHealthPotion : public APickable
 {
 	GENERATED_BODY()
 
+public:
+	float GetHealAmount();
+	
 private:
+	
 	UPROPERTY(EditDefaultsOnly)
 	float HealAmount;
 
-public:
-	float GetHealAmount();
+	UPROPERTY(EditDefaultsOnly)
+	USoundBase* Sound;
+
+protected:
+	virtual void BeginPlay() override;
 };

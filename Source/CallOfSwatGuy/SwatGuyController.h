@@ -10,7 +10,8 @@
  * 
  */
 
-class AAvatar;
+class ASwatGuyCharacter;
+
 UCLASS()
 class CALLOFSWATGUY_API ASwatGuyController : public APlayerController
 {
@@ -20,7 +21,7 @@ public:
 	ASwatGuyController();
 
 private:
-	AAvatar* ControlledAvatar;
+	ASwatGuyCharacter* ControlledCharacter;
 	
 	UPROPERTY(EditAnywhere, Category="Camera", meta=(ClampMin="0"), meta=(ClampMax="15"))
 	FVector2D MouseCameraSensitivity;
@@ -44,6 +45,6 @@ private:
 	void Crouch();
 	void Dance();
 	void UseItem();
-
+	void Fire();
 
 };

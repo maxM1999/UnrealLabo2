@@ -7,10 +7,11 @@
 #include "GameFramework/Pawn.h"
 #include "GameFramework/Character.h"
 #include "SwatGuyAnimInstance.h"
+#include "SwatGuyCharacter.h"
 
 ASwatGuyController::ASwatGuyController()
 {
-	ControlledAvatar = Cast<AAvatar>(GetPawn());
+	ControlledCharacter = Cast<ASwatGuyCharacter>(GetPawn());
 
 	bIsDancing = false;
 }
@@ -21,9 +22,9 @@ void ASwatGuyController::BeginPlay()
 	GamepadCameraSensitivity *= 10;
 
 	// Initialiser ControlledPawn si l'assignation dans le constructeur n'a pas fonctionné
-	if(!IsValid(ControlledAvatar))
+	if(!IsValid(ControlledCharacter))
 	{
-		ControlledAvatar = Cast<AAvatar>(GetPawn());
+		ControlledCharacter = Cast<ASwatGuyCharacter>(GetPawn());
 	}
 }
 
@@ -43,31 +44,32 @@ void ASwatGuyController::SetupInputComponent()
 	InputComponent->BindAction(TEXT("Crouch"), EInputEvent::IE_Pressed, this, &ASwatGuyController::Crouch);
 	InputComponent->BindAction(TEXT("Dance"), EInputEvent::IE_Pressed, this, &ASwatGuyController::Dance);
 	InputComponent->BindAction(TEXT("UseItem"), EInputEvent::IE_Pressed, this, &ASwatGuyController::UseItem);
+	InputComponent->BindAction(TEXT("Fire"), EInputEvent::IE_Pressed, this, &ASwatGuyController::Fire);
 }
 
 void ASwatGuyController::MoveForward(float InValue)
 {
 	if (InValue == 0.f) return;
 	
-	if (!IsValid(ControlledAvatar) || !ControlledAvatar->IsAlive()  || bIsDancing) return;
+	if (!IsValid(ControlledCharacter) || !ControlledCharacter->IsAlive()  || bIsDancing) return;
 
-	const FVector ControlledAvatarForward = ControlledAvatar->GetActorForwardVector();
-	ControlledAvatar->AddMovementInput(ControlledAvatarForward, InValue);
+	const FVector ControlledAvatarForward = ControlledCharacter->GetActorForwardVector();
+	ControlledCharacter->AddMovementInput(ControlledAvatarForward, InValue);
 }
 
 void ASwatGuyController::MoveRight(float InValue)
 {
 	if (InValue == 0.f) return;
 	
-	if (!IsValid(ControlledAvatar) || !ControlledAvatar->IsAlive()  || bIsDancing) return;
+	if (!IsValid(ControlledCharacter) || !ControlledCharacter->IsAlive()  || bIsDancing) return;
 
-	const FVector ControlledAvatarRight = ControlledAvatar->GetActorRightVector();
-	ControlledAvatar->AddMovementInput(ControlledAvatarRight, InValue);
+	const FVector ControlledAvatarRight = ControlledCharacter->GetActorRightVector();
+	ControlledCharacter->AddMovementInput(ControlledAvatarRight, InValue);
 }
 
 void ASwatGuyController::LookVertical(float InValue)
 {
-	if (InValue == 0.f || !IsValid(GetWorld()) || !ControlledAvatar->IsAlive() || bIsDancing) return;
+	if (InValue == 0.f || !IsValid(GetWorld()) || !ControlledCharacter->IsAlive() || bIsDancing) return;
 
 	const float Dt = GetWorld()->GetDeltaSeconds();
 	AddPitchInput(InValue * MouseCameraSensitivity.Y * Dt);
@@ -75,7 +77,7 @@ void ASwatGuyController::LookVertical(float InValue)
 
 void ASwatGuyController::LookHorizontal(float InValue)
 {
-	if (InValue == 0.f || !GetWorld() || !ControlledAvatar->IsAlive() || bIsDancing) return;
+	if (InValue == 0.f || !GetWorld() || !ControlledCharacter->IsAlive() || bIsDancing) return;
 
 	const float Dt = GetWorld()->GetDeltaSeconds();
 	AddYawInput(InValue * MouseCameraSensitivity.X * Dt);
@@ -83,7 +85,7 @@ void ASwatGuyController::LookHorizontal(float InValue)
 
 void ASwatGuyController::GamepadLookVertical(float InValue)
 {
-	if (InValue == 0.f || !GetWorld() || !ControlledAvatar->IsAlive() || bIsDancing) return;
+	if (InValue == 0.f || !GetWorld() || !ControlledCharacter->IsAlive() || bIsDancing) return;
 
 	const float Dt = GetWorld()->GetDeltaSeconds();
 	AddPitchInput(InValue * GamepadCameraSensitivity.Y * Dt);
@@ -91,7 +93,7 @@ void ASwatGuyController::GamepadLookVertical(float InValue)
 
 void ASwatGuyController::GamepadLookHorizontal(float InValue)
 {
-	if (InValue == 0.f || !IsValid(GetWorld()) || !ControlledAvatar->IsAlive() || bIsDancing) return;
+	if (InValue == 0.f || !IsValid(GetWorld()) || !ControlledCharacter->IsAlive() || bIsDancing) return;
 
 	const float Dt = GetWorld()->GetDeltaSeconds();
 	AddYawInput(InValue * GamepadCameraSensitivity.X * Dt);
@@ -99,21 +101,37 @@ void ASwatGuyController::GamepadLookHorizontal(float InValue)
 
 void ASwatGuyController::Crouch()
 {
-	if (!IsValid(ControlledAvatar) || bIsDancing) return;
+	if (!IsValid(ControlledCharacter) || bIsDancing) return;
 
-	if (!ControlledAvatar->bIsCrouched)
+	if (!ControlledCharacter->bIsCrouched)
 	{
-		ControlledAvatar->Crouch();
+		ControlledCharacter->Crouch();
 	}
 	else
 	{
-		ControlledAvatar->UnCrouch();
+		ControlledCharacter->UnCrouch();
 	}
 }
 
 void ASwatGuyController::Dance()
 {
 	bIsDancing = !bIsDancing;
+
+	if(bIsDancing)
+	{
+		if(IsValid(ControlledCharacter))
+		{
+			ControlledCharacter->Dance();
+		}
+	}
+	else
+	{
+		if(IsValid(ControlledCharacter))
+		{
+			ControlledCharacter->StopDancing();
+		}
+	}
+	
 	if (ACharacter* Char = Cast<ACharacter>(GetPawn()))
 	{
 		USwatGuyAnimInstance* AnimInstance = Cast<USwatGuyAnimInstance>(Char->GetMesh()->GetAnimInstance());
@@ -126,8 +144,16 @@ void ASwatGuyController::Dance()
 
 void ASwatGuyController::UseItem()
 {
-	if(IsValid(ControlledAvatar))
+	if(IsValid(ControlledCharacter))
 	{
-		ControlledAvatar->UseItem();
+		ControlledCharacter->UseItem();
+	}
+}
+
+void ASwatGuyController::Fire()
+{
+	if(IsValid(ControlledCharacter))
+	{
+		ControlledCharacter->Fire();
 	}
 }

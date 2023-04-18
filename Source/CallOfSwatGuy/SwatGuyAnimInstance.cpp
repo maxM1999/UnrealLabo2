@@ -55,6 +55,18 @@ bool USwatGuyAnimInstance::IsAlive() const
 	return false;
 }
 
+float USwatGuyAnimInstance::GetControlPitch() const
+{
+	AAvatar* Avatar = Cast<AAvatar>(TryGetPawnOwner());
+	if(IsValid(Avatar))
+	{
+		float Pitch = Avatar->GetControlRotation().Pitch;
+		return FRotator::NormalizeAxis(Pitch);
+	}
+
+	return 0.f;
+}
+
 void USwatGuyAnimInstance::ToggleIsDancing()
 {
 	bIsDancing = !bIsDancing;

@@ -3,7 +3,7 @@
 
 #include "Pickable.h"
 
-#include "Avatar.h"
+#include "SwatGuyCharacter.h"
 #include "Components/SphereComponent.h"
 
 APickable::APickable()
@@ -30,11 +30,14 @@ void APickable::BeginPlay()
 void APickable::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	AAvatar* Avatar = Cast<AAvatar>(OtherActor);
-	if(IsValid(Avatar))
+	ASwatGuyCharacter* Char = Cast<ASwatGuyCharacter>(OtherActor);
+	if(IsValid(Char))
 	{
-		Avatar->PickItem(this);
+		Char->PickItem(this);
+		// Erase this line
 		Deactivate();
+
+		Destroy();
 	}
 }
 

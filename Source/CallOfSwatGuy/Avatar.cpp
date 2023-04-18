@@ -2,35 +2,71 @@
 
 
 #include "Avatar.h"
-
-#include <string>
-
 #include "CharacterAttributes.h"
-#include "HealthPotion.h"
-#include "Pickable.h"
+#include "Rifle.h"
+#include "Kismet/GameplayStatics.h"
+#include "PhysicalMaterials/PhysicalMaterial.h"
 
 AAvatar::AAvatar()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
 	bIsAlive = true;
-	HealthPotionCount = 0;
 }
 
 void AAvatar::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Initialize avatar health
 	if(IsValid(Attributes))
 	{
 		CurrentHealth = Attributes->MaxHealth;
 	}
 }
 
+bool AAvatar::PerformLineTrace(FHitResult& OutHit) const
+{
+	FCollisionQueryParams Params = FCollisionQueryParams();
+	Params.bReturnPhysicalMaterial = true;
+	const FVector CurrLocation = GetActorLocation();
+	const FVector LineTraceEnd = FVector(CurrLocation.X, CurrLocation.Y, CurrLocation.Z - 150.f);
+	return GetWorld()->LineTraceSingleByChannel(OutHit, CurrLocation, LineTraceEnd, ECollisionChannel::ECC_Visibility, Params);
+}
+
+void AAvatar::PlayFootstepsSoundFromHitSurface(UPhysicalMaterial* HitMaterial, const FVector& ImpactPoint)
+{
+	switch(HitMaterial->SurfaceType)
+	{
+	case EPhysicalSurface::SurfaceType1: //Dirt
+		if(IsValid(DirtSound))
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, DirtSound, ImpactPoint);
+		}
+		break;
+	case EPhysicalSurface::SurfaceType2: //Grass
+		if(IsValid(GrassSound))
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, GrassSound, ImpactPoint);
+		}
+		break;
+	case EPhysicalSurface::SurfaceType3: //Sand
+		if(IsValid(SandSound))
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, GrassSound, ImpactPoint);
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+
 void AAvatar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
 }
 
 void AAvatar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -45,7 +81,6 @@ float AAvatar::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, A
 	if(!bIsAlive) return 0.0f;
 	
 	CurrentHealth = FMath::Clamp(CurrentHealth - DamageAmount, 0.f, GetMaxHealth());
-	OnUpdateHealth();
 	
 	if(CurrentHealth == 0.f)
 	{
@@ -79,11 +114,6 @@ float AAvatar::GetPercentHealth() const
 	return 0.f;
 }
 
-int32 AAvatar::GetHealthPotionCount() const
-{
-	return HealthPotionCount;
-}
-
 UTexture2D* AAvatar::GetPortrait() const
 {
 	if(IsValid(Attributes))
@@ -93,52 +123,23 @@ UTexture2D* AAvatar::GetPortrait() const
 	return nullptr;
 }
 
+void AAvatar::FootstepsEvent()
+{
+	FHitResult HitResult;
+	bool bHit = PerformLineTrace(HitResult);
+	if(bHit)
+	{
+		UPhysicalMaterial* PhysicalMaterial = HitResult.PhysMaterial.Get();
+		if(IsValid(PhysicalMaterial))
+		{
+			const FVector ImpactPoint = HitResult.ImpactPoint;
+			PlayFootstepsSoundFromHitSurface(PhysicalMaterial, ImpactPoint);
+		}
+	}
+}
+
 bool AAvatar::IsAlive() const
 {
 	return bIsAlive;
 }
-
-void AAvatar::PickItem(APickable* Pickable)
-{
-	if(!IsValid(Pickable)) return;
-
-	// Cela pourra être éventuellement des munitions
-	AHealthPotion* HealthPotion = Cast<AHealthPotion>(Pickable);
-	if(HealthPotion)
-	{
-		HealthPotionCount++;
-		PossessedHealthPotions.Add(HealthPotion);
-		FString PotionCountStr = FString::FromInt(HealthPotionCount);
-		UpdateItemCount(PotionCountStr);
-	}
-}
-
-void AAvatar::UseItem()
-{
-	if(HealthPotionCount == 0 || !IsValid(Attributes)) return;
-
-	HealthPotionCount--;
-	AHealthPotion* PotionToUse = PossessedHealthPotions.Pop();
-	
-	if(IsValid(PotionToUse))
-	{
-		// Redonner de la vie au personnage et mettre a jour la barre de vie.
-		const float AmountToHeal = PotionToUse->GetHealAmount();
-		CurrentHealth = FMath::Clamp(CurrentHealth + AmountToHeal, 0.f, Attributes->MaxHealth);
-		OnUpdateHealth();
-
-		// Mettre a jour le nombre de potions de vie dans le UI
-		FString PotionCountStr = FString::FromInt(HealthPotionCount);
-		UpdateItemCount(PotionCountStr);
-		
-		PotionToUse->Destroy();
-	}
-}
-
-
-
-
-
-
-
 

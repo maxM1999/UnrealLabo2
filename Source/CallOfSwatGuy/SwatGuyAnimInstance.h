@@ -27,6 +27,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (BlueprintThreadSafe = "true"))
 	bool IsAlive() const;
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (BlueprintThreadSafe = "true"))
+	float GetControlPitch() const;
+
 	void ToggleIsDancing();
 
 private:
