@@ -7,6 +7,7 @@
 #include "Pickable.generated.h"
 
 class USphereComponent;
+class UBaseItem;
 
 UCLASS()
 class CALLOFSWATGUY_API APickable : public AActor
@@ -16,7 +17,6 @@ class CALLOFSWATGUY_API APickable : public AActor
 public:	
 	APickable();
 	virtual void Tick(float DeltaTime) override;
-	void Deactivate();
 
 protected:
 	virtual void BeginPlay() override;
@@ -27,6 +27,8 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	USphereComponent* Sphere;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UBaseItem> ItemType;
 private:
 	UFUNCTION()
 	void OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);

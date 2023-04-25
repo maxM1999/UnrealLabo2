@@ -6,24 +6,18 @@
 #include "Engine/GameInstance.h"
 #include "MyGameInstance.generated.h"
 
-class AHealthPotion;
+class PlayerInventory;
 
-/**
- * 
- */
 UCLASS()
 class CALLOFSWATGUY_API UMyGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
 public:
-	void SetPotionCount(const int32& Count, const int32& HealAmount);
-	void GetPotionCount(int32& OutCount, int32& OutHealAmount);
-	void SetPlayerHealth(const int32& Health);
-	int32 GetPlayerHealth() const;
+	virtual void Init();
+	PlayerInventory* GetPlayerInventory() const;
 
 private:
-	int32 PlayerHealthPotionCount;
-	int32 HealthPotionHealAmount;
-	int32 PlayerHealth = 0;
+	PlayerInventory* Inventory;
+
 };

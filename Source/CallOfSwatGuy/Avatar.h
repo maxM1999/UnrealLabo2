@@ -39,6 +39,8 @@ public:
 
 	bool IsAlive() const;
 
+	virtual void Heal(float Amount);
+
 
 
 	/*******  PROPERTIES *******/

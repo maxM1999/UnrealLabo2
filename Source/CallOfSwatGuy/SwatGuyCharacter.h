@@ -24,13 +24,10 @@ public:
 	void Dance();
 	void StopDancing();
 	void Fire();
-	void UseItem();
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	virtual void Tick(float DeltaSeconds) override;
-
-	void PickItem(APickable* Pickable);
 
 	/* Update health bar widget */
 	UFUNCTION(BlueprintImplementableEvent)
@@ -40,10 +37,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "MyEvents")
 	void UpdateItemCount(const FString& NewPotionCount);
 
-	UFUNCTION(BlueprintPure, meta = (BlueprintThreadSafe = "true"))
-	int32 GetHealthPotionCount() const;
-
-	int32 GetHealthPotionHealAmount() const;
+	virtual void Heal(float Amount) override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -67,8 +61,5 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	USoundBase* FireSound;
-
-	int32 HealthPotionCount;
-	int32 HealthPotionHealAmount;
 	
 };

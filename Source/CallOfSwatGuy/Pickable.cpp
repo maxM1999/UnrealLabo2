@@ -2,9 +2,11 @@
 
 
 #include "Pickable.h"
-
 #include "SwatGuyCharacter.h"
 #include "Components/SphereComponent.h"
+#include "BaseItem.h"
+#include "MyGameInstance.h"
+#include "PlayerInventory.h"
 
 APickable::APickable()
 {
@@ -31,14 +33,27 @@ void APickable::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, A
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	ASwatGuyCharacter* Char = Cast<ASwatGuyCharacter>(OtherActor);
-	if(IsValid(Char))
+	if(IsValid(Char) && IsValid(ItemType))
 	{
-		Char->PickItem(this);
-		// Erase this line
-		Deactivate();
-
-		Destroy();
+		UMyGameInstance* MyGameInstance = Cast<UMyGameInstance>(GetGameInstance());
+		if (IsValid(MyGameInstance))
+		{
+			PlayerInventory* Inventory = MyGameInstance->GetPlayerInventory();
+			if (Inventory)
+			{
+				UBaseItem* NewItem = NewObject<UBaseItem>(GetWorld(), ItemType);
+				if (IsValid(NewItem))
+				{
+					Inventory->AddItemToInventory(ItemType, NewItem);
+					int32 CurrItemCount = Inventory->GetItemCount(ItemType);
+					const FString ItemCountStr = FString::FromInt(CurrItemCount);
+					Char->UpdateItemCount(ItemCountStr);
+				}
+			}
+		}
 	}
+
+	Destroy();
 }
 
 void APickable::Tick(float DeltaTime)
@@ -47,10 +62,5 @@ void APickable::Tick(float DeltaTime)
 
 }
 
-void APickable::Deactivate()
-{
-	SetActorHiddenInGame(true);
-	SetActorTickEnabled(false);
-	SetActorEnableCollision(false);
-}
+
 

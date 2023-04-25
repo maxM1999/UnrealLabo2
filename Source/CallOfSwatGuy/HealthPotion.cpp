@@ -2,19 +2,17 @@
 
 
 #include "HealthPotion.h"
-#include "Kismet/GameplayStatics.h"
+#include "SwatGuyCharacter.h"
 
-float AHealthPotion::GetHealAmount()
+UHealthPotion::UHealthPotion() : HealAmount(10.f)
 {
-	return HealAmount;
+
 }
 
-void AHealthPotion::BeginPlay()
+void UHealthPotion::Use(AActor* Owner)
 {
-	Super::BeginPlay();
-
-	if(IsValid(Sound))
+	if (AAvatar* Avatar = Cast<AAvatar>(Owner))
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, Sound, GetActorLocation());
+		Avatar->Heal(HealAmount);
 	}
 }

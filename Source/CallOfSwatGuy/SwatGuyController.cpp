@@ -2,12 +2,13 @@
 
 
 #include "SwatGuyController.h"
-
 #include "Avatar.h"
-#include "GameFramework/Pawn.h"
 #include "GameFramework/Character.h"
 #include "SwatGuyAnimInstance.h"
 #include "SwatGuyCharacter.h"
+#include "MyGameInstance.h"
+#include "PlayerInventory.h"
+#include "HealthPotion.h"
 
 ASwatGuyController::ASwatGuyController()
 {
@@ -26,6 +27,8 @@ void ASwatGuyController::BeginPlay()
 	{
 		ControlledCharacter = Cast<ASwatGuyCharacter>(GetPawn());
 	}
+
+	GameInstance = Cast<UMyGameInstance>(GetGameInstance());
 }
 
 void ASwatGuyController::SetupInputComponent()
@@ -43,7 +46,7 @@ void ASwatGuyController::SetupInputComponent()
 	
 	InputComponent->BindAction(TEXT("Crouch"), EInputEvent::IE_Pressed, this, &ASwatGuyController::Crouch);
 	InputComponent->BindAction(TEXT("Dance"), EInputEvent::IE_Pressed, this, &ASwatGuyController::Dance);
-	InputComponent->BindAction(TEXT("UseItem"), EInputEvent::IE_Pressed, this, &ASwatGuyController::UseItem);
+	InputComponent->BindAction(TEXT("UseItem"), EInputEvent::IE_Pressed, this, &ASwatGuyController::UseHealthPotion);
 	InputComponent->BindAction(TEXT("Fire"), EInputEvent::IE_Pressed, this, &ASwatGuyController::Fire);
 }
 
@@ -142,11 +145,23 @@ void ASwatGuyController::Dance()
 	}
 }
 
-void ASwatGuyController::UseItem()
+void ASwatGuyController::UseHealthPotion()
 {
-	if(IsValid(ControlledCharacter))
+	UseItem(UHealthPotion::StaticClass());
+}
+
+void ASwatGuyController::UseItem(TSubclassOf<UBaseItem> ItemType)
+{
+	if (IsValid(GameInstance))
 	{
-		ControlledCharacter->UseItem();
+		PlayerInventory* Inventory = GameInstance->GetPlayerInventory();
+		if (Inventory && ControlledCharacter)
+		{
+			Inventory->UseItem(ItemType, ControlledCharacter);
+			int32 NewItemCount = Inventory->GetItemCount(ItemType);
+			const FString NewItemCountStr = FString::FromInt(NewItemCount);
+			ControlledCharacter->UpdateItemCount(NewItemCountStr);
+		}
 	}
 }
 

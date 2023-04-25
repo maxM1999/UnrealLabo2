@@ -2,27 +2,19 @@
 
 
 #include "MyGameInstance.h"
-#include "HealthPotion.h"
+#include "PlayerInventory.h"
 
-
-void UMyGameInstance::SetPotionCount(const int32& Count, const int32& HealAmount)
+void UMyGameInstance::Init()
 {
-	PlayerHealthPotionCount = Count;
-	HealthPotionHealAmount = HealAmount;
+	Super::Init();
+
+	Inventory = new PlayerInventory();
 }
 
-void UMyGameInstance::GetPotionCount(int32& OutCount, int32& OutHealAmount)
+PlayerInventory* UMyGameInstance::GetPlayerInventory() const
 {
-	OutCount = PlayerHealthPotionCount;
-	OutHealAmount = HealthPotionHealAmount;
+	return Inventory;
 }
 
-void UMyGameInstance::SetPlayerHealth(const int32& Health)
-{
-	PlayerHealth = Health;
-}
 
-int32 UMyGameInstance::GetPlayerHealth() const
-{
-	return PlayerHealth;
-}
+

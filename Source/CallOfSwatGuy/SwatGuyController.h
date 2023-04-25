@@ -6,11 +6,10 @@
 #include "GameFramework/PlayerController.h"
 #include "SwatGuyController.generated.h"
 
-/**
- * 
- */
+
 
 class ASwatGuyCharacter;
+class UBaseItem;
 
 UCLASS()
 class CALLOFSWATGUY_API ASwatGuyController : public APlayerController
@@ -22,6 +21,8 @@ public:
 
 private:
 	ASwatGuyCharacter* ControlledCharacter;
+
+	class UMyGameInstance* GameInstance;
 	
 	UPROPERTY(EditAnywhere, Category="Camera", meta=(ClampMin="0"), meta=(ClampMax="15"))
 	FVector2D MouseCameraSensitivity;
@@ -44,7 +45,8 @@ private:
 	void GamepadLookHorizontal(float InValue);
 	void Crouch();
 	void Dance();
-	void UseItem();
+	void UseHealthPotion();
+	void UseItem(TSubclassOf<UBaseItem> ItemType);
 	void Fire();
 
 };

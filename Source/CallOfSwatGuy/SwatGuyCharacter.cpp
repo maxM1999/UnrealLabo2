@@ -5,9 +5,6 @@
 #include "Rifle.h"
 #include "Particles/ParticleSystem.h"
 #include "Kismet/GameplayStatics.h"
-#include "CharacterAttributes.h"
-#include "HealthPotion.h"
-#include "MyGameInstance.h"
 
 ASwatGuyCharacter::ASwatGuyCharacter() : Rifle(nullptr)
 {
@@ -39,21 +36,6 @@ void ASwatGuyCharacter::Fire()
 	PlayFireSound();
 }
 
-void ASwatGuyCharacter::UseItem()
-{
-	if (HealthPotionCount == 0 || !IsValid(Attributes)) return;
-
-	HealthPotionCount--;
-
-	// Redonner de la vie au personnage et mettre a jour la barre de vie.
-	CurrentHealth = FMath::Clamp(CurrentHealth + HealthPotionHealAmount, 0.f, Attributes->MaxHealth);
-	OnUpdateHealth();
-
-	// Mettre a jour le nombre de potions de vie dans le UI
-	FString PotionCountStr = FString::FromInt(HealthPotionCount);
-	UpdateItemCount(PotionCountStr);
-}
-
 float ASwatGuyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float ReturnedDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -66,49 +48,9 @@ void ASwatGuyCharacter::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 }
 
-void ASwatGuyCharacter::PickItem(APickable* Pickable)
-{
-	if (!IsValid(Pickable)) return;
-
-	// Cela pourra être éventuellement des munitions
-	AHealthPotion* HealthPotion = Cast<AHealthPotion>(Pickable);
-	if (HealthPotion)
-	{
-		HealthPotionCount++;
-		HealthPotionHealAmount = HealthPotion->GetHealAmount();
-		FString PotionCountStr = FString::FromInt(HealthPotionCount);
-		UpdateItemCount(PotionCountStr);
-	}
-}
-
-int32 ASwatGuyCharacter::GetHealthPotionCount() const
-{
-	return HealthPotionCount;
-}
-
-int32 ASwatGuyCharacter::GetHealthPotionHealAmount() const
-{
-	return HealthPotionHealAmount;
-}
-
 void ASwatGuyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
-	if(IsValid(GameInstance))
-	{
-		GameInstance->GetPotionCount(HealthPotionCount, HealthPotionHealAmount);
-		const FString ItemCountStr = FString::FromInt(HealthPotionCount);
-		UpdateItemCount(ItemCountStr);
-
-		CurrentHealth = GameInstance->GetPlayerHealth();
-		if(CurrentHealth == 0 || CurrentHealth > GetMaxHealth())
-		{
-			CurrentHealth = GetMaxHealth();
-		}
-		OnUpdateHealth();
-	}
 
 	// Equip the rifle
 	if(IsValid(RifleClass))
@@ -149,4 +91,11 @@ void ASwatGuyCharacter::PlayFireSound()
 		const FVector MuzzleLocation = Rifle->GetMuzzleTransform().GetLocation();
 		UGameplayStatics::PlaySoundAtLocation(this, FireSound, MuzzleLocation);
 	}
+}
+
+void ASwatGuyCharacter::Heal(float Amount)
+{
+	Super::Heal(Amount);
+
+	OnUpdateHealth();
 }

@@ -1,0 +1,14 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "BaseItem.h"
+
+UBaseItem::UBaseItem()
+{
+
+}
+
+void UBaseItem::Use(AActor* Owner)
+{
+}
+

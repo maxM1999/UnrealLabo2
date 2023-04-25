@@ -143,3 +143,12 @@ bool AAvatar::IsAlive() const
 	return bIsAlive;
 }
 
+void AAvatar::Heal(float Amount)
+{
+	CurrentHealth += Amount;
+	if (CurrentHealth > GetMaxHealth())
+	{
+		CurrentHealth = GetMaxHealth();
+	}
+}
+

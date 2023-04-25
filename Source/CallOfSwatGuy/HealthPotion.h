@@ -3,28 +3,23 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Pickable.h"
+#include "BaseItem.h"
 #include "HealthPotion.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CALLOFSWATGUY_API AHealthPotion : public APickable
+class CALLOFSWATGUY_API UHealthPotion : public UBaseItem
 {
 	GENERATED_BODY()
 
 public:
-	float GetHealAmount();
-	
+	UHealthPotion();
+	virtual void Use(AActor* Owner) override;
+
 private:
-	
-	UPROPERTY(EditDefaultsOnly)
 	float HealAmount;
-
-	UPROPERTY(EditDefaultsOnly)
-	USoundBase* Sound;
-
-protected:
-	virtual void BeginPlay() override;
+	
+	
 };

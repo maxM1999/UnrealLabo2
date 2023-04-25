@@ -2,7 +2,6 @@
 
 
 #include "Portal.h"
-
 #include "SwatGuyCharacter.h"
 #include "MyGameInstance.h"
 #include "Components/BoxComponent.h"
@@ -38,12 +37,6 @@ void APortal::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 	ASwatGuyCharacter* Char = Cast<ASwatGuyCharacter>(OtherActor);
 	if(IsValid(Char))
 	{
-		UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
-		if(IsValid(GameInstance))
-		{
-			GameInstance->SetPotionCount(Char->GetHealthPotionCount(), Char->GetHealthPotionHealAmount());
-			GameInstance->SetPlayerHealth(Char->GetHealth());
-		}
 		UGameplayStatics::OpenLevel(this, FName("OtherDimension"));
 	}
 }
