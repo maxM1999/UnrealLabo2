@@ -29,6 +29,7 @@ bool AAvatar::PerformLineTrace(FHitResult& OutHit) const
 {
 	FCollisionQueryParams Params = FCollisionQueryParams();
 	Params.bReturnPhysicalMaterial = true;
+	Params.AddIgnoredActor(this);
 	const FVector CurrLocation = GetActorLocation();
 	const FVector LineTraceEnd = FVector(CurrLocation.X, CurrLocation.Y, CurrLocation.Z - 150.f);
 	return GetWorld()->LineTraceSingleByChannel(OutHit, CurrLocation, LineTraceEnd, ECollisionChannel::ECC_Visibility, Params);
