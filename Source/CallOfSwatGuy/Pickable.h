@@ -29,7 +29,14 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UBaseItem> ItemType;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* Sound;
+
+	UAudioComponent* MyAudioComponent;
 private:
 	UFUNCTION()
 	void OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+
+	void DestroyPickable();
 };

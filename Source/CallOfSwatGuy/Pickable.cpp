@@ -7,6 +7,8 @@
 #include "BaseItem.h"
 #include "MyGameInstance.h"
 #include "PlayerInventory.h"
+#include "Kismet/GameplayStatics.h"
+#include "Components/AudioComponent.h"
 
 APickable::APickable()
 {
@@ -26,6 +28,11 @@ void APickable::BeginPlay()
 	if(IsValid(Sphere))
 	{
 		Sphere->OnComponentBeginOverlap.AddDynamic(this, &APickable::OnSphereBeginOverlap);
+	}
+
+	if (IsValid(Sound))
+	{
+		MyAudioComponent = UGameplayStatics::SpawnSoundAtLocation(this, Sound, GetActorLocation());
 	}
 }
 
@@ -51,6 +58,16 @@ void APickable::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, A
 				}
 			}
 		}
+	}
+
+	DestroyPickable();
+}
+
+void APickable::DestroyPickable()
+{
+	if (IsValid(MyAudioComponent))
+	{
+		MyAudioComponent->Stop();
 	}
 
 	Destroy();
