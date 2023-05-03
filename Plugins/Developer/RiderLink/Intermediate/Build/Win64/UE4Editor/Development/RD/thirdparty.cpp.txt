@@ -1,1 +1,1 @@
-G:\Unreal Projects\CallOfSwatGuy\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RD\Definitions.h
+C:\Users\max_m\OneDrive\Bureau\UnrealPull\UnrealLabo2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RD\Definitions.h

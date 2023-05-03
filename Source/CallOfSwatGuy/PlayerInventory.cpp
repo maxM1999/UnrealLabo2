@@ -3,6 +3,8 @@
 
 #include "PlayerInventory.h"
 #include "BaseItem.h"
+#include "HealthPotion.h"
+
 
 PlayerInventory::PlayerInventory()
 {
@@ -40,8 +42,7 @@ void PlayerInventory::AddItemToInventory(TSubclassOf<UBaseItem> Type, UBaseItem*
 		Inventory.Add(Type, NewItemArr);
 	}
 
-	const int32 FinalCnt = Inventory[Type].Num();
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("%d"), FinalCnt));
+	const int32 FinalCnt = Inventory.Find(Type)->Num();
 }
 
 void PlayerInventory::UseItem(TSubclassOf<UBaseItem> Type, AActor* User)
@@ -54,10 +55,28 @@ void PlayerInventory::UseItem(TSubclassOf<UBaseItem> Type, AActor* User)
 		if (ItemArr && ItemArr->Num() > 0)
 		{
 			UBaseItem* ItemPoped = ItemArr->Pop();
-			if (IsValid(ItemPoped))
+			if (IsValid(ItemPoped) && ItemPoped != nullptr)
 			{
 				ItemPoped->Use(User);
+
+				// Retirer les item du root une fois utilisé.
+				ItemPoped->RemoveFromRoot();
 			}
+		}
+	}
+}
+
+void PlayerInventory::ClearItemsFromRoot()
+{
+	TArray<TSubclassOf<UBaseItem>> Keys;
+	Inventory.GetKeys(Keys);
+
+	for (TSubclassOf<UBaseItem> Key : Keys)
+	{
+		TArray<UBaseItem*> ItemArr = Inventory[Key];
+		for (UBaseItem* Item : ItemArr)
+		{
+			Item->RemoveFromRoot();
 		}
 	}
 }

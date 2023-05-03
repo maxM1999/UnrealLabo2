@@ -7,6 +7,7 @@
 #include "MyGameInstance.generated.h"
 
 class PlayerInventory;
+class PlayerData;
 
 UCLASS()
 class CALLOFSWATGUY_API UMyGameInstance : public UGameInstance
@@ -14,10 +15,13 @@ class CALLOFSWATGUY_API UMyGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
-	virtual void Init();
+	virtual void Init() override;
+	virtual void Shutdown() override;
 	PlayerInventory* GetPlayerInventory() const;
+	PlayerData* GetPlayerData() const;
 
 private:
 	PlayerInventory* Inventory;
+	PlayerData* CharacterData;
 
 };

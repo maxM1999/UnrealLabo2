@@ -5,6 +5,10 @@
 #include "Rifle.h"
 #include "Particles/ParticleSystem.h"
 #include "Kismet/GameplayStatics.h"
+#include "MyGameInstance.h"
+#include "PlayerInventory.h"
+#include "HealthPotion.h"
+#include "PlayerData.h"
 
 ASwatGuyCharacter::ASwatGuyCharacter() : Rifle(nullptr)
 {
@@ -61,6 +65,29 @@ void ASwatGuyCharacter::BeginPlay()
 		{
 			Rifle->SetSockets(FName("Gun_Socket"), FName("Back_Socket"));
 			Rifle->Equip(this, GetMesh());
+		}
+	}
+
+	UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
+	if (IsValid(GameInstance))
+	{
+		PlayerInventory* Inventory = GameInstance->GetPlayerInventory();
+		if (Inventory)
+		{
+			int32 CurrPotionCnt = Inventory->GetItemCount(UHealthPotion::StaticClass());
+			FString CurrItemCntStr = FString::FromInt(CurrPotionCnt);
+			UpdateItemCount(CurrItemCntStr);
+		}
+
+		PlayerData* Data = GameInstance->GetPlayerData();
+		if (Data)
+		{
+			float SavedHealth = Data->GetHealth();
+			if (SavedHealth > 0 && SavedHealth <= GetMaxHealth())
+			{
+				CurrentHealth = SavedHealth;
+				OnUpdateHealth();
+			}
 		}
 	}
 }

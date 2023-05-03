@@ -16,7 +16,9 @@ public:
 	int32 GetItemCount(TSubclassOf<class UBaseItem> Type);
 	void AddItemToInventory(TSubclassOf<UBaseItem> Type, UBaseItem* ItemToAdd);
 	void UseItem(TSubclassOf<UBaseItem> Type, AActor* User);
+	void ClearItemsFromRoot();
 
 private:
+	UPROPERTY()
 	TMap<TSubclassOf<UBaseItem>, TArray<UBaseItem*>> Inventory;
 };

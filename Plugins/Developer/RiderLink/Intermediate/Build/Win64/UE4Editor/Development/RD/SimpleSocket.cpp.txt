@@ -1,5 +1,5 @@
-G:\Unreal Projects\CallOfSwatGuy\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RD\Definitions.h
-G:\Unreal Projects\CallOfSwatGuy\Plugins\Developer\RiderLink\Source\RD\thirdparty\clsocket\src\SimpleSocket.h
+C:\Users\max_m\OneDrive\Bureau\UnrealPull\UnrealLabo2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RD\Definitions.h
+C:\Users\max_m\OneDrive\Bureau\UnrealPull\UnrealLabo2\Plugins\Developer\RiderLink\Source\RD\thirdparty\clsocket\src\SimpleSocket.h
 C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\ucrt\sys/stat.h
 C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\ucrt\corecrt.h
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\INCLUDE\vcruntime.h
@@ -138,11 +138,11 @@ C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\shared\qos.h
 C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\um\Ws2tcpip.h
 C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\shared\ws2ipdef.h
 C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\shared\in6addr.h
-G:\Unreal Projects\CallOfSwatGuy\Plugins\Developer\RiderLink\Source\RD\thirdparty\clsocket\src\Host.h
+C:\Users\max_m\OneDrive\Bureau\UnrealPull\UnrealLabo2\Plugins\Developer\RiderLink\Source\RD\thirdparty\clsocket\src\Host.h
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\INCLUDE\cstdint
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\INCLUDE\yvals_core.h
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\INCLUDE\xkeycheck.h
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\INCLUDE\stdint.h
-G:\Unreal Projects\CallOfSwatGuy\Plugins\Developer\RiderLink\Source\RD\thirdparty\clsocket\src\StatTimer.h
+C:\Users\max_m\OneDrive\Bureau\UnrealPull\UnrealLabo2\Plugins\Developer\RiderLink\Source\RD\thirdparty\clsocket\src\StatTimer.h
 C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\ucrt\time.h
 C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\ucrt\corecrt_wtime.h

@@ -6,7 +6,7 @@
 /NAME:"UE4Editor-RiderLogging.dll"
 /IGNORE:4221
 /NODEFAULTLIB
-"G:\Unreal Projects\CallOfSwatGuy\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RiderLogging\Module.RiderLogging.cpp.obj"
-"G:\Unreal Projects\CallOfSwatGuy\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RiderLogging\Default.rc2.res"
-/OUT:"G:\Unreal Projects\CallOfSwatGuy\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RiderLogging\UE4Editor-RiderLogging.lib"
+"C:\Users\max_m\OneDrive\Bureau\UnrealPull\UnrealLabo2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RiderLogging\Module.RiderLogging.cpp.obj"
+"C:\Users\max_m\OneDrive\Bureau\UnrealPull\UnrealLabo2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RiderLogging\Default.rc2.res"
+/OUT:"C:\Users\max_m\OneDrive\Bureau\UnrealPull\UnrealLabo2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RiderLogging\UE4Editor-RiderLogging.lib"
 /INCLUDE:IMPLEMENT_MODULE_RiderLogging

@@ -48,9 +48,11 @@ void APickable::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, A
 			PlayerInventory* Inventory = MyGameInstance->GetPlayerInventory();
 			if (Inventory)
 			{
-				UBaseItem* NewItem = NewObject<UBaseItem>(GetWorld(), ItemType);
+				UBaseItem* NewItem = NewObject<UBaseItem>(GetGameInstance(), ItemType);
 				if (IsValid(NewItem))
 				{
+					// Éviter le garbage collector
+					NewItem->AddToRoot();
 					Inventory->AddItemToInventory(ItemType, NewItem);
 					int32 CurrItemCount = Inventory->GetItemCount(ItemType);
 					const FString ItemCountStr = FString::FromInt(CurrItemCount);

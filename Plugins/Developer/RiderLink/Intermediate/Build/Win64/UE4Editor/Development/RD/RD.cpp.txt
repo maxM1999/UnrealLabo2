@@ -1,5 +1,5 @@
-G:\Unreal Projects\CallOfSwatGuy\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RD\Definitions.h
-G:\Unreal Projects\CallOfSwatGuy\Plugins\Developer\RiderLink\Source\RD\RD.h
+C:\Users\max_m\OneDrive\Bureau\UnrealPull\UnrealLabo2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RD\Definitions.h
+C:\Users\max_m\OneDrive\Bureau\UnrealPull\UnrealLabo2\Plugins\Developer\RiderLink\Source\RD\RD.h
 G:\UE_4.26\Engine\Source\Runtime\Core\Public\Logging/LogMacros.h
 G:\UE_4.26\Engine\Source\Runtime\Core\Public\CoreTypes.h
 G:\UE_4.26\Engine\Source\Runtime\Core\Public\HAL/Platform.h

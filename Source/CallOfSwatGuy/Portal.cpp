@@ -6,6 +6,8 @@
 #include "MyGameInstance.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "MyGameInstance.h"
+#include "PlayerData.h"
 
 APortal::APortal()
 {
@@ -37,6 +39,15 @@ void APortal::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 	ASwatGuyCharacter* Char = Cast<ASwatGuyCharacter>(OtherActor);
 	if(IsValid(Char))
 	{
+		UMyGameInstance* GameInstance = Cast<UMyGameInstance>(GetGameInstance());
+		if (IsValid(GameInstance))
+		{
+			PlayerData* Data = GameInstance->GetPlayerData();
+			if (Data)
+			{
+				Data->SetHealth(Char->GetHealth());
+			}
+		}
 		UGameplayStatics::OpenLevel(this, FName("OtherDimension"));
 	}
 }
