@@ -54,7 +54,7 @@ void AAvatar::PlayFootstepsSoundFromHitSurface(UPhysicalMaterial* HitMaterial, c
 	case EPhysicalSurface::SurfaceType3: //Sand
 		if(IsValid(SandSound))
 		{
-			UGameplayStatics::PlaySoundAtLocation(this, GrassSound, ImpactPoint);
+			UGameplayStatics::PlaySoundAtLocation(this, SandSound, ImpactPoint);
 		}
 		break;
 	default:
