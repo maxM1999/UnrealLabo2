@@ -167,8 +167,13 @@ void ASwatGuyController::UseItem(TSubclassOf<UBaseItem> ItemType)
 
 void ASwatGuyController::Fire()
 {
+	if (bIsDancing) return; 
+
 	if(IsValid(ControlledCharacter))
 	{
-		ControlledCharacter->Fire();
+		if (ControlledCharacter->IsAlive())
+		{
+			ControlledCharacter->Fire();
+		}
 	}
 }

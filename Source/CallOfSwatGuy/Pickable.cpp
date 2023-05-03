@@ -60,9 +60,9 @@ void APickable::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, A
 				}
 			}
 		}
-	}
 
-	DestroyPickable();
+		DestroyPickable();
+	}
 }
 
 void APickable::DestroyPickable()
