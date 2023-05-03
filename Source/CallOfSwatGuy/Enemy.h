@@ -17,6 +17,12 @@ public:
 	AEnemy();
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+	void BeginAttack();
+
+	UFUNCTION(BlueprintCallable)
+	void EndAttack();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -27,13 +33,25 @@ private:
 	AAvatar* MyTarget = nullptr;
 
 	UPROPERTY(EditAnywhere)
+	UAnimMontage* AttackMontage;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AMeleeWeapon> MeleeWeaponClass;
+
+	AMeleeWeapon* MeleeWeapon;
+
+	UPROPERTY(EditAnywhere)
 	float AttackRange = 200.f;
+
+	UPROPERTY(EditAnywhere)
+	float AttackRate = 2.0f;
+	float AttackTimer = 0.f;
 
 	/** BRAIN FUNCTIONS */
 	bool IsDead();
 	bool HasTarget();
 	bool CanSeeTarget();
 	bool CanAttackTarget();
-	void AttackTarget();
+	void AttackTarget(float DeltaTime);
 	void ChaseTarget();
 };

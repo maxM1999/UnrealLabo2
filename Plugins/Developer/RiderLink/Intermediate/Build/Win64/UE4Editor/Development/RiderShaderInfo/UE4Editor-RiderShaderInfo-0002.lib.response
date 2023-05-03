@@ -6,7 +6,7 @@
 /NAME:"UE4Editor-RiderShaderInfo-0002.dll"
 /IGNORE:4221
 /NODEFAULTLIB
-"G:\Unreal Projects\CallOfSwatGuy\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RiderShaderInfo\RiderShaderInfo.cpp.obj"
-"G:\Unreal Projects\CallOfSwatGuy\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RiderShaderInfo\Default.rc2.res"
-/OUT:"G:\Unreal Projects\CallOfSwatGuy\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RiderShaderInfo\UE4Editor-RiderShaderInfo-0002.lib"
+"C:\Users\1910057\Documents\Unreal Projects\v2\UnrealLabo2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RiderShaderInfo\RiderShaderInfo.cpp.obj"
+"C:\Users\1910057\Documents\Unreal Projects\v2\UnrealLabo2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RiderShaderInfo\Default.rc2.res"
+/OUT:"C:\Users\1910057\Documents\Unreal Projects\v2\UnrealLabo2\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UE4Editor\Development\RiderShaderInfo\UE4Editor-RiderShaderInfo-0002.lib"
 /INCLUDE:IMPLEMENT_MODULE_RiderShaderInfo

@@ -5,6 +5,10 @@
 #include "Avatar.h"
 #include "DrawDebugHelpers.h"
 #include "AIController.h"
+#include "Animation/AnimInstance.h"
+#include "MeleeWeapon.h"
+#include "Engine/SkeletalMeshSocket.h"
+
 
 
 AEnemy::AEnemy()
@@ -16,6 +20,18 @@ AEnemy::AEnemy()
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (MeleeWeaponClass)
+	{
+		UWorld* World = GetWorld();
+		MeleeWeapon = World->SpawnActor<AMeleeWeapon>(MeleeWeaponClass, FVector(), FRotator());
+
+		const USkeletalMeshSocket* Socket = GetMesh()->GetSocketByName(FName("RightHandSocket"));
+		if (IsValid(Socket))
+		{
+			Socket->AttachActor(MeleeWeapon, GetMesh());
+		}
+	}
 	
 }
 
@@ -48,7 +64,7 @@ void AEnemy::Tick(float DeltaTime)
 					{
 						AI->StopMovement();
 					}
-					AttackTarget();
+					AttackTarget(DeltaTime);
 				}
 				else
 				{
@@ -56,6 +72,22 @@ void AEnemy::Tick(float DeltaTime)
 				}
 			}
 		}
+	}
+}
+
+void AEnemy::BeginAttack()
+{
+	if (MeleeWeapon)
+	{
+		MeleeWeapon->BeginSwing(this);
+	}
+}
+
+void AEnemy::EndAttack()
+{
+	if (MeleeWeapon)
+	{
+		MeleeWeapon->ResetSwing();
 	}
 }
 
@@ -107,15 +139,29 @@ bool AEnemy::CanAttackTarget()
 	return false;
 }
 
-void AEnemy::AttackTarget()
+void AEnemy::AttackTarget(float DeltaTime)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString("Attack"));
+	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString("Attack"));
+
+	AttackTimer -= DeltaTime;
+	if (AttackTimer <= 0.f)
+	{
+		if (IsValid(AttackMontage))
+		{
+			UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+			if (IsValid(AnimInstance))
+			{
+				AnimInstance->Montage_JumpToSection(FName("Slash"), AttackMontage);
+				AnimInstance->Montage_Play(AttackMontage);
+			}
+		}
+
+		AttackTimer = AttackRate;
+	}
 }
 
 void AEnemy::ChaseTarget()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, FString("Chase"));
-
 	AAIController* AI = Cast<AAIController>(GetController());
 	if (IsValid(AI))
 	{
